@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Student">
+    <Key>
+      <PropertyRef Name="StudentId" />
+    </Key>
+    <Property Name="StudentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Student_name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="StudentPasswords" Relationship="Model.FK_StudentPassword_Student" FromRole="Student" ToRole="StudentPassword" />
+  </EntityType>
+  <EntityType Name="StudentPassword">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="StudentId" Type="Int32" />
+    <NavigationProperty Name="Student" Relationship="Model.FK_StudentPassword_Student" FromRole="StudentPassword" ToRole="Student" />
+  </EntityType>
+  <EntityContainer Name="MultiPle_Table__data_insertEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Students" EntityType="Self.Student" />
+    <EntitySet Name="StudentPasswords" EntityType="Self.StudentPassword" />
+    <AssociationSet Name="FK_StudentPassword_Student" Association="Model.FK_StudentPassword_Student">
+      <End Role="Student" EntitySet="Students" />
+      <End Role="StudentPassword" EntitySet="StudentPasswords" />
+    </AssociationSet>
+  </EntityContainer>
+  <Association Name="FK_StudentPassword_Student">
+    <End Type="Model.Student" Role="Student" Multiplicity="0..1" />
+    <End Type="Model.StudentPassword" Role="StudentPassword" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Student">
+        <PropertyRef Name="StudentId" />
+      </Principal>
+      <Dependent Role="StudentPassword">
+        <PropertyRef Name="StudentId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
